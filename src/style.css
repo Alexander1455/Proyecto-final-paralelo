@@ -1,0 +1,9 @@
+body {
+  background-color: black;
+  color: #fff;
+}
+
+nav > ul {
+  display: grid;
+  gap: 0.8em;
+}
