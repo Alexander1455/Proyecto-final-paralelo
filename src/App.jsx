@@ -1,20 +1,15 @@
-import './style.css'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import LoginPage from './pages/login/LoginPage'
+import RegisterPage from './pages/register/RegisterPage'
+import AppPage from './pages/app/AppPage'
 
 const App = () => {
   return (
     <BrowserRouter>
-      <nav>
-        <ul>
-          <Link to='/'>Login</Link>
-          <Link to='/registro'>Registro</Link>
-          <Link to='/'></Link>
-        </ul>
-      </nav>
-
       <Routes>
-        <Route path='/' element={<div>Pagina de Login</div>} />
-        <Route path='/registro' element={<div>Página de Registro</div>} />
+        <Route path='/' element={<LoginPage />} />
+        <Route path='/registro' element={<RegisterPage />} />
+        <Route path='/app' element={<AppPage />} />
       </Routes>
     </BrowserRouter>
   )
