@@ -60,4 +60,5 @@ const Container = styled.main`
   background-color: #4f59e4;
   border-radius: 4rem;
   padding: 1.5em;
+  overflow: hidden;
 `
