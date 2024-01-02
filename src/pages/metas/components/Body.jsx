@@ -1,8 +1,18 @@
+import { useAuthStore } from '../../../store/useAuthStore'
+import { useGetAllRoutine } from '../../../hooks/useRoutine'
+
 const Body = () => {
+  const { token } = useAuthStore()
+  const { data, isLoading, isError } = useGetAllRoutine(token)
+
   return (
-    <div>
-      <p>asdasd</p>
-    </div>
+    <ul>
+      {!isLoading && !isError && data && (
+        data.data.map(routine => (
+          <li key={routine.id}>{routine.name}</li>
+        ))
+      )}
+    </ul>
   )
 }
 

@@ -4,13 +4,13 @@ import { useModal } from '../../../hooks/useModal'
 import ModalRoutine from './ModalRoutine'
 
 const Header = () => {
-  const { ModalContainer, handleOpen } = useModal()
+  const { ModalContainer, handleOpen, handleClose } = useModal()
 
   return (
     <>
       <Button variant='contained' startIcon={<AddIcon/>} fullWidth onClick={handleOpen}>Añadir nueva rutina</Button>
       <ModalContainer styles={{ width: '40rem' }}>
-        <ModalRoutine/>
+        <ModalRoutine close={handleClose}/>
       </ModalContainer>
     </>
   )

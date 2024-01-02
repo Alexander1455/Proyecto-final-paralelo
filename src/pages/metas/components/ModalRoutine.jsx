@@ -12,9 +12,13 @@ import {
 // import dayjs from 'dayjs'
 // import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useCreateRoutine } from '../../../hooks/useRoutine'
+import { useAuthStore } from '../../../store/useAuthStore'
+import useToast from '../../../hooks/useToast'
+import { useQueryClient } from '@tanstack/react-query'
 // import { useState } from 'react'
 
-const ModalRoutine = () => {
+const ModalRoutine = ({ close }) => {
   // const [formats, setFormats] = useState(() => [])
 
   // const handleFormat = (event, newFormats) => {
@@ -23,11 +27,27 @@ const ModalRoutine = () => {
 
   // const [time, setTime] = useState(dayjs('2022-04-17T12:00'))
 
-  const { handleSubmit, register, formState: { errors } } = useForm()
+  const { handleSubmit, register, reset, formState: { errors } } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data)
-    // console.log(time)
+  const { token } = useAuthStore()
+
+  const { mutateAsync } = useCreateRoutine(token)
+
+  const { createToast } = useToast()
+
+  const queryClient = useQueryClient()
+
+  const onSubmit = async (data) => {
+    const res = await mutateAsync(data)
+    console.log(res)
+    if (res.status === 200) {
+      queryClient.invalidateQueries(['routines'])
+      createToast('success', 'Rutina creada correctamente')
+    } else {
+      createToast('error', 'Error al crear la rutina')
+    }
+    reset()
+    close()
   }
 
   return (
