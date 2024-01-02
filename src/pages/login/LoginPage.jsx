@@ -1,8 +1,44 @@
+import { useNavigate, Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { Box, Button, Container, TextField, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+// import { useLoginUser } from '../../hooks/Auth'
+import { useForm } from 'react-hook-form'
+import { useLoginUser } from '../../hooks/Auth'
+import useToast from '../../hooks/useToast'
+import { useAuthStore } from '../../store/useAuthStore'
 
 const LoginPage = () => {
+  const { mutateAsync } = useLoginUser()
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors }
+  } = useForm()
+
+  const { createToast } = useToast()
+
+  const navigate = useNavigate()
+
+  const { setToken } = useAuthStore()
+
+  const loginSuccess = res => {
+    // TODO: Redirigir al usuario a la página de inicio
+    setToken(res.data.token)
+    navigate('/metas')
+  }
+
+  const handleLogin = async data => {
+    const res = await mutateAsync(data)
+    if (res.status === 200) {
+      createToast('success', res.data.message)
+      loginSuccess(res)
+    }
+    if (res.status === 404) {
+      createToast('error', res.data.message)
+    }
+  }
+
   return (
     <Container
       sx={{
@@ -12,12 +48,34 @@ const LoginPage = () => {
         alignItems: 'center'
       }}
     >
-      <Form>
+      <Form onSubmit={handleSubmit(handleLogin)}>
         <Typography variant='h2'>Ingresar</Typography>
-        <TextField type='text' variant='outlined' label='correo' />
-        <TextField type='password' variant='outlined' label='password' />
+        <TextField
+          type='text'
+          variant='outlined'
+          label='correo'
+          {...register('email', {
+            required: 'El correo es obligatorio es obligatorio',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'El correo no es válido'
+            }
+          })}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+        />
+        <TextField
+          type='password'
+          variant='outlined'
+          label='password'
+          {...register('password', {
+            required: 'La contraseña es obligatorio'
+          })}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+        />
         <Box sx={{ width: '100%' }}>
-          <Button variant='contained' fullWidth>
+          <Button variant='contained' fullWidth type='submit'>
             Ingresar
           </Button>
           <Link to='/registro'>
