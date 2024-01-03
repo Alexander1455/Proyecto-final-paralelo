@@ -3,9 +3,10 @@ import styled from '@emotion/styled'
 import { Box, Button, Container, TextField, Typography } from '@mui/material'
 // import { useLoginUser } from '../../hooks/Auth'
 import { useForm } from 'react-hook-form'
-import { useLoginUser } from '../../hooks/Auth'
+import { useLoginUser, useVerifyToken } from '../../hooks/Auth'
 import useToast from '../../hooks/useToast'
 import { useAuthStore } from '../../store/useAuthStore'
+import { useEffect } from 'react'
 
 const LoginPage = () => {
   const { mutateAsync } = useLoginUser()
@@ -20,10 +21,9 @@ const LoginPage = () => {
 
   const navigate = useNavigate()
 
-  const { setToken } = useAuthStore()
+  const { token, setToken } = useAuthStore()
 
   const loginSuccess = res => {
-    // TODO: Redirigir al usuario a la página de inicio
     setToken(res.data.token)
     navigate('/metas')
   }
@@ -38,6 +38,14 @@ const LoginPage = () => {
       createToast('error', res.data.message)
     }
   }
+
+  const { data, isLoading, isError } = useVerifyToken(token)
+
+  useEffect(() => {
+    if (token && !isLoading && !isError && data?.status === 200) {
+      navigate('/metas')
+    }
+  }, [data])
 
   return (
     <Container
