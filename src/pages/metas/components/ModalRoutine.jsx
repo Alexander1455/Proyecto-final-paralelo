@@ -2,36 +2,67 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   TextField,
   Typography
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useCreateRoutine } from '../../../hooks/useRoutine'
+import { useCreateRoutine, usePutRoutine } from '../../../hooks/useRoutine'
 import { useAuthStore } from '../../../store/useAuthStore'
 import useToast from '../../../hooks/useToast'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import EditIcon from '@mui/icons-material/Edit'
 
-const ModalRoutine = ({ close, type, routine }) => {
-  const { handleSubmit, register, reset, formState: { errors } } = useForm()
+const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm()
 
   const { token } = useAuthStore()
 
-  const { mutateAsync } = useCreateRoutine(token)
+  const { mutateAsync: createRoutine } = useCreateRoutine(token)
 
   const { createToast } = useToast()
 
   const queryClient = useQueryClient()
 
+  const { mutateAsync: putRoutine } = usePutRoutine(token)
+
   useEffect(() => {
-    if (type === 'view') {
+    if (type === 'view' || type === 'edit') {
       reset({ name: routine.name, description: routine.description })
     }
   }, [type])
 
-  const onSubmit = async (data) => {
-    const res = await mutateAsync(data)
-    console.log(res)
+  const onSubmit = async data => {
+    if (type === 'create') {
+      handleCreate(data)
+    } else if (type === 'edit') {
+      handleEdit(data)
+    }
+  }
+
+  const handleEdit = async (data) => {
+    const res = await putRoutine({ ...data, id: routine.id })
+
+    if (res.status === 200) {
+      queryClient.invalidateQueries(['routines'])
+      createToast('success', 'Rutina editada correctamente')
+    } else {
+      createToast('error', 'Error al editar la rutina')
+    }
+    setType('view')
+    reset()
+    close()
+  }
+
+  const handleCreate = async (data) => {
+    const res = await createRoutine(data)
+
     if (res.status === 200) {
       queryClient.invalidateQueries(['routines'])
       createToast('success', 'Rutina creada correctamente')
@@ -43,17 +74,27 @@ const ModalRoutine = ({ close, type, routine }) => {
   }
 
   return (
-    <Box display='grid' gap={3}>
+    <Box display='grid' gap={3} position='relative'>
       <Typography variant='h4' fontWeight='bold' textAlign='center'>
-        Crear Rutina
+        {(type === 'create' && 'Crear Rutina') || (type === 'edit' && 'Editar Rutina') || (type === 'view' && 'Rutina') }
       </Typography>
-      <Grid container gap={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+      <Grid
+        container
+        gap={2}
+        component='form'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Grid item xs={12}>
-          <TextField label='Nombre de la rutina' variant='outlined' fullWidth {...register('name', {
-            required: 'El nombre es requerido'
-          })}
-          error={!!errors.name}
-          helperText={errors.name?.message}
+          <TextField
+            label='Nombre de la rutina'
+            variant='outlined'
+            fullWidth
+            {...register('name', {
+              required: 'El nombre es requerido'
+            })}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            disabled={type === 'view'}
           />
         </Grid>
         <TextField
@@ -67,12 +108,31 @@ const ModalRoutine = ({ close, type, routine }) => {
           })}
           error={!!errors.description}
           helperText={errors.description?.message}
+          disabled={type === 'view'}
         />
         <Box display='flex' justifyContent='space-between' width='100%'>
-          <Button variant='contained' color='error' onClick={close}>cerrar</Button>
-          { type === 'view' ? null : <Button variant='contained' type='submit'>Guardar</Button>}
+          <Button variant='contained' color='error' onClick={close}>
+            cerrar
+          </Button>
+          {type === 'view'
+            ? null
+            : (
+            <Button variant='contained' type='submit'>
+              Guardar
+            </Button>
+              )}
         </Box>
       </Grid>
+      {type === 'view' && (
+        <IconButton
+          aria-label='edit'
+          color='warning'
+          sx={{ position: 'absolute', top: '0', right: '0', cursor: 'pointer' }}
+          onClick={() => setType('edit')}
+        >
+          <EditIcon />
+        </IconButton>
+      )}
     </Box>
   )
 }

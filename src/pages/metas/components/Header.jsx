@@ -7,12 +7,12 @@ const Header = () => {
   const { ModalContainer, handleOpen, handleClose } = useModal()
 
   return (
-    <>
-      <Button variant='contained' startIcon={<AddIcon/>} fullWidth onClick={handleOpen}>Añadir nueva rutina</Button>
+    <div>
+      <Button variant='contained' startIcon={<AddIcon/>} fullWidth onClick={handleOpen} sx={{ fontWeight: 'bold', fontSize: '1.3em' }}>Añadir nueva rutina</Button>
       <ModalContainer styles={{ width: '40rem' }}>
         <ModalRoutine close={handleClose}/>
       </ModalContainer>
-    </>
+    </div>
   )
 }
 

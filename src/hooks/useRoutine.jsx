@@ -28,6 +28,20 @@ const getAllRoutine = async (_ctx) => {
   }
 }
 
+const putRoutine = async (token, data) => {
+  try {
+    return await baseRoutineApi.put(`/${data.id}`, data, {
+      headers: {
+        token
+      }
+    })
+  } catch (error) {
+    return error.response
+  }
+}
+
 export const useCreateRoutine = (token) => useMutation({ mutationFn: (routine) => createRoutine(token, routine) })
 
 export const useGetAllRoutine = (token) => useQuery({ queryKey: ['routines', token], queryFn: getAllRoutine })
+
+export const usePutRoutine = (token) => useMutation({ mutationFn: (data) => putRoutine(token, data) })

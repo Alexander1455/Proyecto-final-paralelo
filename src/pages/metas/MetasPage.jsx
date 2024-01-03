@@ -4,7 +4,7 @@ import Body from './components/Body'
 
 const MetasPage = () => {
   return (
-    <Box height='100%' display='flex' flexDirection='column' gap={3}>
+    <Box height='100%' display='flex' flexDirection='column' gap={3} padding={2}>
       <Header/>
       <Body/>
     </Box>
