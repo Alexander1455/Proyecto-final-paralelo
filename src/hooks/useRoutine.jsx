@@ -40,8 +40,24 @@ const putRoutine = async (token, data) => {
   }
 }
 
+const deleteRoutine = async (token, id) => {
+  console.log(token)
+  console.log(id)
+  try {
+    return await baseRoutineApi.delete(`/${id}`, {
+      headers: {
+        token
+      }
+    })
+  } catch (error) {
+    return error.response
+  }
+}
+
 export const useCreateRoutine = (token) => useMutation({ mutationFn: (routine) => createRoutine(token, routine) })
 
 export const useGetAllRoutine = (token) => useQuery({ queryKey: ['routines', token], queryFn: getAllRoutine })
 
 export const usePutRoutine = (token) => useMutation({ mutationFn: (data) => putRoutine(token, data) })
+
+export const useDeleteRoutine = (token) => useMutation({ mutationFn: (id) => deleteRoutine(token, id) })

@@ -7,12 +7,14 @@ import {
   Typography
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useCreateRoutine, usePutRoutine } from '../../../hooks/useRoutine'
+import { useCreateRoutine, useDeleteRoutine, usePutRoutine } from '../../../hooks/useRoutine'
 import { useAuthStore } from '../../../store/useAuthStore'
 import useToast from '../../../hooks/useToast'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
+import { Delete } from '@mui/icons-material'
+import { useModalConfirm } from '../../../hooks/useModal'
 
 const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
   const {
@@ -73,6 +75,22 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
     close()
   }
 
+  const { ModalConfirm, handleOpen } = useModalConfirm()
+
+  const { mutateAsync } = useDeleteRoutine(token)
+
+  const handleDelete = async () => {
+    const res = await mutateAsync(routine.id)
+    console.log(res)
+    if (res.status === 200) {
+      queryClient.invalidateQueries(['routines'])
+      createToast('success', res.data.message)
+    } else {
+      createToast('error', res.data.message)
+    }
+    close()
+  }
+
   return (
     <Box display='grid' gap={3} position='relative'>
       <Typography variant='h4' fontWeight='bold' textAlign='center'>
@@ -124,15 +142,26 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
         </Box>
       </Grid>
       {type === 'view' && (
-        <IconButton
-          aria-label='edit'
-          color='warning'
-          sx={{ position: 'absolute', top: '0', right: '0', cursor: 'pointer' }}
-          onClick={() => setType('edit')}
-        >
-          <EditIcon />
-        </IconButton>
+        <Box sx={{ position: 'absolute', top: '0', right: '0', display: 'flex', gap: 1 }}>
+          <IconButton
+            aria-label='delete'
+            color='error'
+            sx={{ cursor: 'pointer' }}
+            onClick={handleOpen}
+          >
+            <Delete />
+          </IconButton>
+          <IconButton
+            aria-label='edit'
+            color='warning'
+            sx={{ cursor: 'pointer' }}
+            onClick={() => setType('edit')}
+          >
+            <EditIcon />
+          </IconButton>
+        </Box>
       )}
+      <ModalConfirm onConfirm={handleDelete}/>
     </Box>
   )
 }
