@@ -1,56 +1,87 @@
-import styled from '@emotion/styled'
+import { Box, Typography } from '@mui/material'
+import { useAuthStore } from '../../../store/useAuthStore'
+import { useUserById } from '../../../hooks/useUser'
 
 const GameStats = () => {
+  const { token } = useAuthStore()
+  const { data: res, isLoading, isError } = useUserById(token)
+
   return (
-    <Main>
-      <Card>
-      <img src="https://i.gifer.com/origin/18/1881d8691bd9ff18bea62c0a275e1da6_w200.gif" alt="fire gif" />
-      <div>
-        <p>1</p>
-      </div>
-      </Card>
-      <Card>
-      <img src="https://i.gifer.com/origin/18/1881d8691bd9ff18bea62c0a275e1da6_w200.gif" alt="fire gif" />
-      <div>
-        <p>1</p>
-      </div>
-      </Card>
-      <Card>
-      <img src="https://i.gifer.com/origin/18/1881d8691bd9ff18bea62c0a275e1da6_w200.gif" alt="fire gif" />
-      <div>
-        <p>1</p>
-      </div>
-      </Card>
-      </Main>
+    <Box display='flex' justifyContent='space-between'>
+      <Box
+        display='flex'
+        alignItems='center'
+        gap={1}
+        sx={{ img: { width: '3rem' } }}
+      >
+        <img src='/fire.webp' alt='fire gif' />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: '#4f59e4',
+            width: '2.5rem',
+            height: '2.5rem',
+            clipPath:
+              'polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 50% 100%, 0 75%, 0 25%)'
+          }}
+        >
+          <Typography fontSize='1.1em' fontWeight='bold' color='white'>
+            {!isLoading && !isError && res && res.data.daysOfSplit}
+          </Typography>
+        </Box>
+      </Box>
+      <Box
+        display='flex'
+        alignItems='center'
+        gap={1}
+        sx={{ img: { width: '3rem' } }}
+      >
+        <img src='/heart.webp' alt='fire gif' />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: '#4f59e4',
+            width: '2.5rem',
+            height: '2.5rem',
+            clipPath:
+              'polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 50% 100%, 0 75%, 0 25%)'
+          }}
+        >
+          <Typography fontSize='1.1em' fontWeight='bold' color='white'>
+            {!isLoading && !isError && res && res.data.heart}
+          </Typography>
+        </Box>
+      </Box>
+      <Box
+        display='flex'
+        alignItems='center'
+        gap={1}
+        sx={{ img: { width: '3rem' } }}
+      >
+        <img src='/gema.webp' alt='fire gif' />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: '#4f59e4',
+            width: '2.5rem',
+            height: '2.5rem',
+            clipPath:
+              'polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 50% 100%, 0 75%, 0 25%)'
+          }}
+        >
+          <Typography fontSize='1.1em' fontWeight='bold' color='white'>
+            {!isLoading && !isError && res && res.data.gems}
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 
 export default GameStats
-
-const Main = styled.main`
-  display: flex;
-  justify-content: space-between;
-`
-
-const Card = styled.div`
-  display: flex;
-  align-items: center;
-
-  & > img {
-    width: 3rem;
-    margin-bottom: 0.6em;
-  }
-
-  & > div {
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 50% 100%, 0 75%, 0 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #4f59e4;
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: white;
-  }
-`
