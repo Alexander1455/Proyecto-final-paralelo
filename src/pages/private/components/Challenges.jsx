@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import { useChallengeActive } from '../../../hooks/useChallente'
+import { useChallengeActive, useChallengeResolve } from '../../../hooks/useChallente'
 import { useAuthStore } from '../../../store/useAuthStore'
-import { useEffect } from 'react'
 import Challenge from './Challenge'
 import Skeleton from '../../../components/Skeleton'
 
@@ -10,11 +9,7 @@ const Challenges = () => {
 
   const { data, isLoading, isError } = useChallengeActive(token)
 
-  useEffect(() => {
-    if (data && !isLoading && !isError) {
-      console.log(data)
-    }
-  }, [data])
+  const { data: challengesResolves, isLoading: load } = useChallengeResolve(token)
 
   return (
     <Box flexBasis='100%' bgcolor="#4f59e4" borderRadius={3} p={2}>
@@ -27,8 +22,8 @@ const Challenges = () => {
       )}
       {isError && 'Error'}
       {!isLoading && !isError && data && data.data.length === 0 && 'No active challenges'}
-      {!isLoading && !isError && data && data.data.length > 0 && data.data.map((challenge) => (
-        <Challenge key={challenge.id} {...challenge}/>
+      {!isLoading && !isError && data && data.data.length > 0 && challengesResolves && !load && data.data.map((challenge) => (
+        <Challenge key={challenge.id} {...challenge} isResolve={challengesResolves.data.includes(challenge.id)}/>
       ))}
       </Box>
     </Box>
