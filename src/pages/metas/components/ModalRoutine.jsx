@@ -45,6 +45,8 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
       handleCreate(data)
     } else if (type === 'edit') {
       handleEdit(data)
+    } else if (type === 'view') {
+      handleFinish(data)
     }
   }
 
@@ -91,6 +93,19 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
     close()
   }
 
+  const handleFinish = async (data) => {
+    const res = await putRoutine({ ...data, id: routine.id, state: true })
+    console.log(res)
+    if (res.status === 200) {
+      queryClient.invalidateQueries(['routines'])
+      createToast('success', 'Rutina terminada, felicitaciones')
+    } else {
+      createToast('error', 'Error al editar la rutina')
+    }
+    setType('view')
+    close()
+  }
+
   return (
     <Box display='grid' gap={3} position='relative'>
       <Typography variant='h4' fontWeight='bold' textAlign='center'>
@@ -133,7 +148,9 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
             cerrar
           </Button>
           {type === 'view'
-            ? null
+            ? <Button variant='contained' type='submit'>
+            Terminar
+          </Button>
             : (
             <Button variant='contained' type='submit'>
               Guardar

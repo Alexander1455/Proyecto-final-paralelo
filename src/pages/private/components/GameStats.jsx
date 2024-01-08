@@ -28,7 +28,8 @@ const GameStats = () => {
           }}
         >
           <Typography fontSize='1.1em' fontWeight='bold' color='white'>
-            {!isLoading && !isError && res && res.data.daysOfSplit}
+            {/* {!isLoading && !isError && res && res.data.daysOfSplit} */}
+            {2}
           </Typography>
         </Box>
       </Box>
