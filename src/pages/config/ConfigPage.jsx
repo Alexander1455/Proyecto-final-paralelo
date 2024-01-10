@@ -1,7 +1,8 @@
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useAuthStore } from '../../store/useAuthStore'
 import { useNavigate } from 'react-router-dom'
 import useToast from '../../hooks/useToast'
+import Credentials from './components/Credentials'
 
 const ConfigPage = () => {
   const { clear } = useAuthStore()
@@ -16,9 +17,9 @@ const ConfigPage = () => {
 
   return (
     <div>
-      <p>config Page</p>
-      <button>Cerrar sesión</button>
-      <Button onClick={handleLogout} variant='contained' type='button' color='error'>Cerrar sesión</Button>
+      <Typography variant='h3' fontWeight='bold' textAlign='center'>Configuración</Typography>
+        <Credentials />
+      <Button onClick={handleLogout} variant='contained' type='button' color='error' sx={{ mt: 4 }}>Cerrar sesión</Button>
     </div>
   )
 }

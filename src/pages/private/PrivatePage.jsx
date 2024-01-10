@@ -56,9 +56,10 @@ const Main = styled.main`
 
 const Container = styled.main`
   width: 100%;
-  height: 100%;
+  height: 90vh;
   background-color: #4f59e4;
   border-radius: 4rem;
   padding: 1.5em;
   overflow: hidden;
+  margin: auto 0;
 `

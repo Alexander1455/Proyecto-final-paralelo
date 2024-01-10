@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import baseAuthApi from '../api/userApi'
 
 const getUserById = async (_ctx) => {
@@ -27,6 +27,20 @@ const getProgress = async (_ctx) => {
   }
 }
 
+const putUser = async (data, token) => {
+  try {
+    return await baseAuthApi.put('/', data, {
+      headers: {
+        token
+      }
+    })
+  } catch (error) {
+    return error.response
+  }
+}
+
 export const useUserById = (token) => useQuery({ queryKey: ['userId', token], queryFn: getUserById })
 
 export const useProgress = (token) => useQuery({ queryKey: ['progress', token], queryFn: getProgress })
+
+export const usePutUser = (token) => useMutation({ mutationFn: (data) => putUser(data, token) })
