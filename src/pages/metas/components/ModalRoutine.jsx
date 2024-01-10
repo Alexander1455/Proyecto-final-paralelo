@@ -11,10 +11,13 @@ import { useCreateRoutine, useDeleteRoutine, usePutRoutine } from '../../../hook
 import { useAuthStore } from '../../../store/useAuthStore'
 import useToast from '../../../hooks/useToast'
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
 import { Delete } from '@mui/icons-material'
 import { useModalConfirm } from '../../../hooks/useModal'
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs'
 
 const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
   const {
@@ -34,6 +37,8 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
 
   const { mutateAsync: putRoutine } = usePutRoutine(token)
 
+  const [time, setTime] = useState(type === 'create' ? dayjs('2022-04-17T12:00:00') : dayjs(`2022-04-17T${routine.time}`))
+
   useEffect(() => {
     if (type === 'view' || type === 'edit') {
       reset({ name: routine.name, description: routine.description })
@@ -51,7 +56,8 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
   }
 
   const handleEdit = async (data) => {
-    const res = await putRoutine({ ...data, id: routine.id })
+    const formattedTime = dayjs(time.$d).format('HH:mm:ss')
+    const res = await putRoutine({ ...data, id: routine.id, time: formattedTime })
 
     if (res.status === 200) {
       queryClient.invalidateQueries(['routines'])
@@ -65,8 +71,8 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
   }
 
   const handleCreate = async (data) => {
-    const res = await createRoutine(data)
-
+    const formattedTime = dayjs(time.$d).format('HH:mm:ss')
+    const res = await createRoutine({ ...data, time: formattedTime })
     if (res.status === 200) {
       queryClient.invalidateQueries(['routines'])
       createToast('success', 'Rutina creada correctamente')
@@ -143,6 +149,19 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
           helperText={errors.description?.message}
           disabled={type === 'view'}
         />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TimePicker
+                label='Hora de recordatorio'
+                sx={{ width: '100%' }}
+                {...register('time', {
+                  required: 'La hora es obligatoria'
+                })}
+                helperText={errors.time?.message}
+                value={time}
+                onChange={newValue => setTime(newValue)}
+                disabled={type === 'view'}
+              />
+            </LocalizationProvider>
         <Box display='flex' justifyContent='space-between' width='100%'>
           <Button variant='contained' color='error' onClick={close}>
             cerrar

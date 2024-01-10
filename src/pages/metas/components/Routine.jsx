@@ -3,7 +3,7 @@ import { useModal } from '../../../hooks/useModal'
 import ModalRoutine from './ModalRoutine'
 import { useState } from 'react'
 
-const Routine = ({ id, name, description }) => {
+const Routine = ({ id, name, description, time }) => {
   const { ModalContainer, handleOpen, handleClose } = useModal()
 
   const [typeModal, setTypeModal] = useState('view')
@@ -19,7 +19,7 @@ const Routine = ({ id, name, description }) => {
         <Typography fontSize="1.5em" fontWeight='bold' color='white' lineHeight='1.5' textAlign='center' width='100%'>{name}</Typography>
       </Box>
       <ModalContainer styles={{ width: '40rem' }} onClose={closeModal}>
-        <ModalRoutine id={id} type={typeModal} setType={setTypeModal} routine={{ id, name, description } } close={closeModal} />
+        <ModalRoutine id={id} type={typeModal} setType={setTypeModal} routine={{ id, name, description, time } } close={closeModal} />
       </ModalContainer>
     </>
   )
