@@ -19,7 +19,7 @@ const ProgresoPage = () => {
         <>
           <Box>
             <Typography variant='h4' fontWeight='bold' lineHeight='1.8'>
-              Desafios diarios completados
+              Rutinas completadas
             </Typography>
             <Box display='flex' alignItems='center' gap={2}>
             <Box width="95%">
@@ -34,7 +34,7 @@ const ProgresoPage = () => {
           </Box>
           <Box>
             <Typography variant='h4' fontWeight='bold' lineHeight='1.8'>
-              Rutinas completadas
+            Desafios diarios completados
             </Typography>
             <Box display='flex' alignItems='center' gap={2}>
             <Box width="95%">
