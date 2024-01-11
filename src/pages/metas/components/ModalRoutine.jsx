@@ -153,9 +153,7 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
               <TimePicker
                 label='Hora de recordatorio'
                 sx={{ width: '100%' }}
-                {...register('time', {
-                  required: 'La hora es obligatoria'
-                })}
+                {...register('time')}
                 helperText={errors.time?.message}
                 value={time}
                 onChange={newValue => setTime(newValue)}
@@ -166,15 +164,9 @@ const ModalRoutine = ({ close, type = 'create', routine, setType }) => {
           <Button variant='contained' color='error' onClick={close}>
             cerrar
           </Button>
-          {type === 'view'
-            ? <Button variant='contained' type='submit'>
-            Terminar
+          <Button variant='contained' type='submit'>
+            { type === 'view' ? 'Terminar' : 'Guardar' }
           </Button>
-            : (
-            <Button variant='contained' type='submit'>
-              Guardar
-            </Button>
-              )}
         </Box>
       </Grid>
       {type === 'view' && (
