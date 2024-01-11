@@ -32,7 +32,7 @@ const Credentials = () => {
 
   useEffect(() => {
     if (res && !isLoading && !isError) {
-      reset({ name: res.data.lastName, lastName: res.data.name, email: res.data.email })
+      reset({ name: res.data.name, lastName: res.data.lastName, email: res.data.email })
     }
   }, [res])
 
