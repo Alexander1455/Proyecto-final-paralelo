@@ -15,7 +15,7 @@ Además, te ofrecemos una sección dedicada a frases motivadoras que te inspirar
 Únete a nosotros y comienza tu viaje de crecimiento personal. Personaliza tus rutinas, acepta desafíos y descubre cómo pequeños cambios diarios pueden conducir a un crecimiento significativo a lo largo del tiempo. ¡Inspírate, crece y alcanza tus metas con nuestra plataforma de crecimiento personal!
 
 - **Sitio Implementado:** [Enlace al Sitio](https://tu-sitio.com)
-- **Artículo del Blog:** [Título del Artículo](https://tu-blog.com/articulo)
+- **Artículo del Blog:** [Progresionica](https://medium.com/@alexander21111121/progresi%C3%B3nica-f3d235c0cf39])
 - **LinkedIn del Autor:** [Alexander Rivera Del Valle](https://www.linkedin.com/in/alexanderrivera1455/)
 
 ## Instalación
